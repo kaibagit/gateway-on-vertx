@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+}
+
+group 'me.luliru.gateway'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+
+    if (project.hasProperty("env") &&
+            (project['env'] == "dwd-qa1" || project['env'] == "dwd-qa2" || project['env'] == "production")) {
+        maven { url "http://nexus.nidianwo.com/nexus/content/repositories/releases" }
+        maven { url "http://nexus.nidianwo.com/nexus/content/repositories/snapshots" }
+        maven { url "http://nexus.nidianwo.com/nexus/content/repositories/thirdparty" }
+        maven { url "http://nexus.nidianwo.com/nexus/content/repositories/central" }
+
+    } else {
+        maven { url "http://192.168.1.177:8081/nexus/content/repositories/releases" }
+        maven { url "http://192.168.1.177:8081/nexus/content/repositories/snapshots" }
+        maven { url "http://192.168.1.177:8081/nexus/content/repositories/thirdparty" }
+        maven { url "http://192.168.1.177:8081/nexus/content/repositories/central" }
+    }
+
+    maven {
+        url "http://maven.aliyun.com/nexus/content/groups/public"
+    }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter:1.4.3.RELEASE'
+
+    compile ('com.alibaba:dubbo:2.5.6.2-D-RELEASE'){
+        exclude group: "io.netty"
+    }
+    compile 'com.dianwoda.open:toolbox-dubbo:1.1.4'
+    compile ('com.dianwoda.open:toolbox-trace:1.0-SNAPSHOT'){
+        exclude group: "io.netty"
+    }
+    compile 'com.dianwoda.open:toolbox:1.3-SNAPSHOT'
+
+    compile 'io.vertx:vertx-core:3.7.0'
+    compile 'io.vertx:vertx-rx-java2:3.7.0'
+    compile 'io.vertx:vertx-web-client:3.7.0'
+    // mysql async client
+    compile ('io.vertx:vertx-mysql-postgresql-client:3.5.3'){
+        exclude group: "io.netty"
+    }
+    compile 'io.vertx:vertx-jdbc-client:3.7.0'
+    compile 'com.zaxxer:HikariCP:3.1.0'
+    compile 'mysql:mysql-connector-java:5.1.40'
+    compile 'org.projectlombok:lombok:1.18.6'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'ch.qos.logback:logback-classic:1.0.6'
+    compile 'com.alibaba:fastjson:1.2.47'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'com.caucho:hessian:4.0.38'
+
+    compile 'com.dianwoda.open:order-mapping-api:2.0-SNAPSHOT'
+    compile 'com.dianwoba.wireless:order-query-service-api:0.0.1-SNAPSHOT'
+    compile 'com.dianwoba.dispatch:weather-monitor-service-api:0.0.1-SNAPSHOT'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
